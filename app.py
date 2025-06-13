@@ -24,6 +24,11 @@ def detect_ch340_port():
             except Exception:
                 continue
 
+    elif system == "Darwin":  # macOS
+        ports = glob.glob("/dev/tty.wchusbserial*") + glob.glob("/dev/cu.wchusbserial*")
+        if ports:
+            return ports[0]
+
     elif system == "Windows":
         try:
             output = subprocess.check_output(["wmic", "path", "Win32_SerialPort"], text=True)
@@ -34,6 +39,7 @@ def detect_ch340_port():
             return None
 
     return None
+
 
 def run_cmd(label, cmd):
     print(label)
